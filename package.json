@@ -1,5 +1,5 @@
 {
-  "name": "foobar",
+  "name": "globestay",
   "type": "module",
   "imports": {
     "#*": "./*.js"
