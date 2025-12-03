@@ -1,5 +1,6 @@
 import db from "#db/client";
-import { createUser } from "#db/queries/users";
+import { createHotel } from "#db/queries/hotels";
+import { createAdminUser } from "#db/queries/users";
 
 await db.connect();
 await seed();
@@ -7,7 +8,7 @@ await db.end();
 console.log("🌱 Database seeded.");
 
 async function seed() {
-  await createUser("Admin", "Admin", "admin", "admin123", "Admin");
+  await createAdminUser("Admin", "Admin", "admin", "admin123", "Admin");
   const hotels = [
     {
       name: "Sunset Resort",
