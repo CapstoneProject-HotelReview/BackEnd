@@ -5,16 +5,21 @@ export default router;
 import { createUser, getUserByUsernameAndPassword } from "#db/queries/users";
 import requireBody from "#middleware/requireBody";
 import { createToken } from "#utils/jwt";
+import passwordRequirements from "#middleware/passwordRequirements";
 
 router
   .route("/register")
-  .post(requireBody(["username", "password"]), async (req, res) => {
-    const { username, password } = req.body;
-    const user = await createUser(username, password);
+  .post(
+    requireBody(["firstname", "lastname", "username", "password"]),
+    passwordRequirements,
+    async (req, res) => {
+      const { firstname, lastname, username, password } = req.body;
+      const user = await createUser(firstname, lastname, username, password);
 
-    const token = await createToken({ id: user.id });
-    res.status(201).send(token);
-  });
+      const token = createToken({ id: user.id });
+      res.status(201).send(token);
+    }
+  );
 
 router
   .route("/login")
@@ -23,6 +28,6 @@ router
     const user = await getUserByUsernameAndPassword(username, password);
     if (!user) return res.status(401).send("Invalid username or password.");
 
-    const token = await createToken({ id: user.id });
+    const token = createToken({ id: user.id });
     res.send(token);
   });

@@ -1,7 +1,27 @@
 DROP TABLE IF EXISTS users;
 
 CREATE TABLE users (
-  id serial PRIMARY KEY,
-  username text NOT NULL UNIQUE,
-  password text NOT NULL
+  id SERIAL PRIMARY KEY,
+  firstname VARCHAR(15) NOT NULL,
+  lastname VARCHAR(15) NOT NULL,
+  username VARCHAR(15) NOT NULL UNIQUE,
+  password VARCHAR(150) NOT NULL,
+  role VARCHAR(15) NOT NULL DEFAULT 'user'
+);
+
+CREATE TABLE hotels (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(100) NOT NULL UNIQUE,
+  description TEXT NOT NULL,
+  price DECIMAL(7, 2) NOT NULL
+);
+
+CREATE TABLE reviews (
+  id SERIAL PRIMARY KEY,
+  subject VARCHAR(150) NOT NULL,
+  rating INTEGER NOT NULL CHECK (rating BETWEEN 1 AND 5),
+  review TEXT NOT NULL,
+  created_at TIMESTAMP DEFAULT NOW(),
+  user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  hotel_id INTEGER NOT NULL REFERENCES hotels(id) ON DELETE CASCADE
 );
