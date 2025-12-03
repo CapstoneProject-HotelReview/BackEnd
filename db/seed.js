@@ -7,5 +7,5 @@ await db.end();
 console.log("🌱 Database seeded.");
 
 async function seed() {
-  await createUser("Admin", "Admin", "admin", "admin123");
+  await createUser("Admin", "Admin", "admin", "admin123", "Admin");
 }
