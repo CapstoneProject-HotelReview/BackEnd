@@ -1,5 +1,15 @@
 import db from "#db/client";
 
+export async function getHotels() {
+  const { rows } = await db.query(`
+    SELECT *
+    FROM hotels
+    ORDER BY id;
+    
+    `);
+  return rows;
+}
+
 export async function createHotel(name, description, price) {
   try {
     const sql = `
@@ -8,7 +18,9 @@ export async function createHotel(name, description, price) {
       RETURNING *
     `;
     const values = [name, description, price];
-    const { rows: [hotel] } = await db.query(sql, values);
+    const {
+      rows: [hotel],
+    } = await db.query(sql, values);
     return hotel;
   } catch (error) {
     console.error("Error with createHotel query: ", error);
