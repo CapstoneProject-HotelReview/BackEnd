@@ -7,7 +7,7 @@ import getUserFromToken from "#middleware/getUserFromToken";
 import handlePostgresErrors from "#middleware/handlePostgresErrors";
 import cors from "cors";
 import morgan from "morgan";
-import hotelsRouter from "./api/hotels";
+import hotelsRouter from "#api/hotels";
 
 app.use(cors({ origin: process.env.CORS_ORIGIN ?? /localhost/ }));
 
