@@ -23,14 +23,14 @@ export async function getHotelById(id) {
   return hotel;
 }
 
-export async function createHotel(name, description, price) {
+export async function createHotel(name, description, price, image) {
   try {
     const sql = `
-      INSERT INTO hotels (name, description, price)
-      VALUES ($1, $2, $3)
+      INSERT INTO hotels (name, description, price, image)
+      VALUES ($1, $2, $3, $4)
       RETURNING *
     `;
-    const values = [name, description, price];
+    const values = [name, description, price, image];
     const {
       rows: [hotel],
     } = await db.query(sql, values);
