@@ -15,7 +15,8 @@ CREATE TABLE hotels (
   id SERIAL PRIMARY KEY,
   name VARCHAR(100) NOT NULL UNIQUE,
   description TEXT NOT NULL,
-  price DECIMAL(7, 2) NOT NULL
+  price DECIMAL(7, 2) NOT NULL,
+  image TEXT
 );
 
 CREATE TABLE reviews (

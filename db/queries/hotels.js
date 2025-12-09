@@ -10,6 +10,19 @@ export async function getHotels() {
   return rows;
 }
 
+export async function getHotelById(id) {
+  const {
+    rows: [hotel],
+  } = await db.query(
+    `
+    SELECT * 
+    FROM hotels 
+    WHERE id = $1`,
+    [id]
+  );
+  return hotel;
+}
+
 export async function createHotel(name, description, price) {
   try {
     const sql = `

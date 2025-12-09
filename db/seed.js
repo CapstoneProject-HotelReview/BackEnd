@@ -15,6 +15,8 @@ async function seed() {
       description:
         "A peaceful beachside resort with ocean views and relaxing amenities.",
       price: 199.99,
+      image:
+        "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=1600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aG90ZWxzfGVufDB8fDB8fHww",
     },
     {
       name: "Mountain Lodge",
