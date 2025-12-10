@@ -1,7 +1,7 @@
 import express from "express";
 const router = express.Router();
 
-import { getHotels, createHotel } from "#db/queries/hotels";
+import { getHotels, getHotelById, createHotel } from "#db/queries/hotels";
 
 // GET all hotels
 
@@ -9,6 +9,23 @@ router.get("/", async (req, res) => {
   try {
     const hotels = await getHotels();
     res.send(hotels);
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+});
+
+// GET a single hotel
+
+router.get("/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const hotel = await getHotelById(id);
+
+    if (!hotel) {
+      return res.status(404).send("Hotel not found");
+    }
+
+    res.send(hotel);
   } catch (error) {
     res.status(500).send(error.message);
   }

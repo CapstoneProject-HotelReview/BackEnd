@@ -1,6 +1,6 @@
+DROP TABLE IF EXISTS reviews;
 DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS hotels;
-DROP TABLE IF EXISTS reviews;
 
 CREATE TABLE users (
   id SERIAL PRIMARY KEY,
@@ -15,7 +15,8 @@ CREATE TABLE hotels (
   id SERIAL PRIMARY KEY,
   name VARCHAR(100) NOT NULL UNIQUE,
   description TEXT NOT NULL,
-  price DECIMAL(7, 2) NOT NULL
+  price DECIMAL(7, 2) NOT NULL,
+  image TEXT
 );
 
 CREATE TABLE reviews (
