@@ -7,7 +7,7 @@ import { getReviewsByUserId } from "#db/queries/reviews";
 router
   .route("/:id/reviews")
   .get(async (req, res) => {
-    const reviews = await getReviewsByUserId(req.params.id, req.query.page, req.query.limit);
-    if (!reviews.length) return res.status(404).send("No reviews found.");
-    res.send(req.reviews);
+    const { page = 1, limit = 3 } = req.query;
+    const reviews = await getReviewsByUserId(req.params.id, parseInt(page), parseInt(limit));
+    return res.json(reviews);
   });
