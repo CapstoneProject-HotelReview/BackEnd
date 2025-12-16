@@ -1,8 +1,11 @@
 import express from "express";
+import requireBody from "#middleware/requireBody";
+import requireUser from "#middleware/requireUser";
+
 const router = express.Router();
 export default router;
 
-import { getReviewsByUserId } from "#db/queries/reviews";
+import { getReviewsByUserId, addReview } from "#db/queries/reviews";
 import requireUser from "#middleware/requireUser";
 import requireBody from "#middleware/requireBody";
 
@@ -14,9 +17,20 @@ router
     return res.json(reviews);
   });
 
-  router
-    .route("/:hotelId/reviews")
-    .post(requireUser, requireBody(["rating", "subject", "review"]), async (req, res) => {
+router
+  .route("/:hotelId/reviews")
+  .post(
+    requireUser,
+    requireBody(["rating", "subject", "review"]),
+    async (req, res) => {
       const { rating, subject, review } = req.body;
-      const userReview = await addReview(rating, subject, review);
-    });
+      const userReview = await addReview(
+        req.params.hotelId,
+        req.user.id,
+        rating,
+        subject,
+        review
+      );
+      res.status(201).json(userReview);
+    }
+  );

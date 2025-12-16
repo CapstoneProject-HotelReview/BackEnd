@@ -7,7 +7,8 @@ import { getHotels, getHotelById, createHotel } from "#db/queries/hotels";
 
 router.get("/", async (req, res) => {
   try {
-    const hotels = await getHotels();
+    const search = req.query.search || null;
+    const hotels = await getHotels(search);
     res.send(hotels);
   } catch (error) {
     res.status(500).send(error.message);
