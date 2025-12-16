@@ -1,9 +1,5 @@
 import db from "#db/client";
 
-export async function addReview(params) {
-  
-}
-
 /* Retrieve reviews from user - latest first and 3 at a time */
 export async function getReviewsByUserId(id, page = 1, limit = 3) {
   const offset = (page - 1) * limit;

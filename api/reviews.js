@@ -6,8 +6,6 @@ const router = express.Router();
 export default router;
 
 import { getReviewsByUserId, addReview } from "#db/queries/reviews";
-import requireUser from "#middleware/requireUser";
-import requireBody from "#middleware/requireBody";
 
 router
   .route("/:id/reviews")
