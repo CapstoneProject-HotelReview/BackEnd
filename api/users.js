@@ -49,5 +49,8 @@ router
     const { profilePic } = req.body;
     const userId = req.user.id;
     const updatedProfilePic = await updateProfilePic(profilePic, userId);
-    res.status(200).json({ message: "Profile Picture Updated", UserPic: updatedProfilePic });
+    res.status(200).json({
+      message: "Profile Picture Updated",
+      UserPic: updatedProfilePic,
+    });
   });
