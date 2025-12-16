@@ -3,6 +3,8 @@ const router = express.Router();
 export default router;
 
 import { getReviewsByUserId } from "#db/queries/reviews";
+import requireUser from "#middleware/requireUser";
+import requireBody from "#middleware/requireBody";
 
 router
   .route("/:id/reviews")
@@ -11,3 +13,10 @@ router
     const reviews = await getReviewsByUserId(req.params.id, parseInt(page), parseInt(limit));
     return res.json(reviews);
   });
+
+  router
+    .route("/:hotelId/reviews")
+    .post(requireUser, requireBody(["rating", "subject", "review"]), async (req, res) => {
+      const { rating, subject, review } = req.body;
+      const userReview = await addReview(rating, subject, review);
+    });

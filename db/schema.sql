@@ -4,6 +4,7 @@ DROP TABLE IF EXISTS hotels;
 
 CREATE TABLE users (
   id SERIAL PRIMARY KEY,
+  profilePic TEXT,
   firstname VARCHAR(15) NOT NULL,
   lastname VARCHAR(15) NOT NULL,
   username VARCHAR(15) NOT NULL UNIQUE,
