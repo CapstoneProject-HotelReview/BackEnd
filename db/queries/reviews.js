@@ -18,3 +18,18 @@ export async function getReviewsByUserId(id, page = 1, limit = 3) {
     throw error;
   }
 }
+
+export async function addReview(hotel_id, user_id, rating, subject, review) {
+  try {
+    const sql = `
+  INSERT INTO reviews (hotel_id, user_id, rating, subject, review) 
+  VALUES ($1, $2, $3, $4, $5, NOW())
+  RETURNING *;
+  `;
+    const values = [hotel_id, user_id, rating, subject, review];
+    const {
+      rows: [reviews],
+    } = await db.query(sql, values);
+    return reviews;
+  } catch (error) {}
+}
