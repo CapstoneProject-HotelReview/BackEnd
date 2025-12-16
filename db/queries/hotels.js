@@ -1,12 +1,26 @@
 import db from "#db/client";
 
-export async function getHotels() {
+export async function getHotels(search) {
+  if (!search) {
   const { rows } = await db.query(`
     SELECT *
     FROM hotels
     ORDER BY id;
     
-    `);
+    `); 
+  return rows;
+}
+
+const { rows } = await db.query(
+    `
+      SELECT *
+      FROM hotels
+      WHERE name ILIKE '%' || $1 || '%'
+      ORDER BY name;
+    `,
+    [search]
+  );
+
   return rows;
 }
 
