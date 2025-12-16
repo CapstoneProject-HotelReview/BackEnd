@@ -2,6 +2,7 @@ import express from "express";
 const router = express.Router();
 
 import { getHotels, getHotelById, createHotel } from "#db/queries/hotels";
+import { getReviewsByHotelId } from "#db/queries/reviews";
 
 // GET all hotels
 
@@ -43,5 +44,14 @@ router.post("/", async (req, res) => {
     res.status(500).send(error.message);
   }
 });
+
+// GET Hotel reviews by Hotel id
+router
+  .route("/:hotelId/reviews")
+  .get(async (req, res) => {
+    const { page = 1, limit = 3 } = req.query;
+    const reviews = await getReviewsByHotelId(req.params.hotelId, parseInt(page), parseInt(limit));
+    return res.json(reviews);
+  });
 
 export default router;

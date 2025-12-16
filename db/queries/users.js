@@ -61,3 +61,20 @@ export async function getUserById(id) {
   } = await db.query(sql, [id]);
   return user;
 }
+
+export async function updateProfilePic(userPic, userId) {
+  try {
+    const sql = `
+      UPDATE users 
+      SET profilePic = $1
+      WHERE id = $2
+      RETURNING *
+    `;
+    const values = [userPic, userId];
+    const { rows: [profilePic] } = await db.query(sql, values);
+    return profilePic;
+  } catch (error) {
+    console.error("Error with updateProfilePic query: ", error);
+    throw error;
+  }
+}
