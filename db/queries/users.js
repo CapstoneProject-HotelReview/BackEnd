@@ -1,7 +1,14 @@
 import db from "#db/client";
 import bcrypt from "bcrypt";
+import pool from "../client.js";
 
-export async function createAdminUser(firstname, lastname, username, password, role) {
+export async function createAdminUser(
+  firstname,
+  lastname,
+  username,
+  password,
+  role,
+) {
   try {
     const sql = `
       INSERT INTO users (firstname, lastname, username, password, role)
@@ -10,7 +17,9 @@ export async function createAdminUser(firstname, lastname, username, password, r
     `;
     const hashedPassword = await bcrypt.hash(password, 10);
     const values = [firstname, lastname, username, hashedPassword, role];
-    const { rows: [user] } = await db.query(sql, values);
+    const {
+      rows: [user],
+    } = await db.query(sql, values);
     return user;
   } catch (error) {
     console.error("Error with createAdminUser query: ", error);
@@ -71,7 +80,9 @@ export async function updateProfilePic(userPic, userId) {
       RETURNING *
     `;
     const values = [userPic, userId];
-    const { rows: [profilePic] } = await db.query(sql, values);
+    const {
+      rows: [profilePic],
+    } = await db.query(sql, values);
     return profilePic;
   } catch (error) {
     console.error("Error with updateProfilePic query: ", error);

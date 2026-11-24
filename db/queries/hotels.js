@@ -1,56 +1,28 @@
-import db from "#db/client";
+import pool from "../client.js";
 
 export async function getHotels(search) {
-  if (!search) {
-  const { rows } = await db.query(`
-    SELECT *
-    FROM hotels
-    ORDER BY id;
-    
-    `); 
-  return rows;
-}
-
-const { rows } = await db.query(
-    `
-      SELECT *
-      FROM hotels
-      WHERE name ILIKE '%' || $1 || '%'
-      ORDER BY name;
-    `,
-    [search]
-  );
-
-  return rows;
+  try {
+    const query = search
+      ? "SELECT * FROM hotels WHERE name ILIKE $1"
+      : "SELECT * FROM hotels";
+    const values = search ? [`%${search}%`] : [];
+    const result = await pool.query(query, values);
+    return result.rows;
+  } catch (err) {
+    console.error("Database query failed in getHotels:", err);
+    throw err;
+  }
 }
 
 export async function getHotelById(id) {
-  const {
-    rows: [hotel],
-  } = await db.query(
-    `
-    SELECT * 
-    FROM hotels 
-    WHERE id = $1`,
-    [id]
-  );
-  return hotel;
+  const result = await pool.query("SELECT * FROM hotels WHERE id = $1", [id]);
+  return result.rows[0];
 }
 
-export async function createHotel(name, description, price, image) {
-  try {
-    const sql = `
-      INSERT INTO hotels (name, description, price, image)
-      VALUES ($1, $2, $3, $4)
-      RETURNING *
-    `;
-    const values = [name, description, price, image];
-    const {
-      rows: [hotel],
-    } = await db.query(sql, values);
-    return hotel;
-  } catch (error) {
-    console.error("Error with createHotel query: ", error);
-    throw error;
-  }
+export async function createHotel(name, description, price) {
+  const result = await pool.query(
+    "INSERT INTO hotels (name, description, price) VALUES ($1, $2, $3) RETURNING *",
+    [name, description, price],
+  );
+  return result.rows[0];
 }

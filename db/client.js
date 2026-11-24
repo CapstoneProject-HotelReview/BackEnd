@@ -1,11 +1,12 @@
-import pg from "pg";
+import pkg from "pg";
+const { Pool } = pkg;
 
-const options = { connectionString: process.env.DATABASE_URL };
+const pool = new Pool({
+  user: "postgres",
+  host: "localhost",
+  database: "GlobeStay",
+  password: "yourpassword",
+  port: 5432,
+});
 
-// Need SSL for external database connection
-if (process.env.NODE_ENV === "production") {
-  options.ssl = { rejectUnauthorized: false };
-}
-
-const db = new pg.Client(options);
-export default db;
+export default pool;

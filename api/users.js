@@ -2,7 +2,12 @@ import express from "express";
 const router = express.Router();
 export default router;
 
-import { createUser, getUserById, getUserByUsernameAndPassword, updateProfilePic } from "#db/queries/users";
+import {
+  createUser,
+  getUserById,
+  getUserByUsernameAndPassword,
+  updateProfilePic,
+} from "#db/queries/users";
 import requireBody from "#middleware/requireBody";
 import requireUser from "#middleware/requireUser";
 import { createToken } from "#utils/jwt";
@@ -22,7 +27,7 @@ router
 
       const token = createToken({ id: user.id });
       res.status(201).send(token);
-    }
+    },
   );
 
 router
@@ -36,21 +41,17 @@ router
     res.send(token);
   });
 
-router
-  .route("/me")
-  .get(getUserFromToken, async (req, res) => {
-    const user = await getUserById(req.user.id);
-    res.json(user);
-  });
+router.route("/me").get(getUserFromToken, async (req, res) => {
+  const user = await getUserById(req.user.id);
+  res.json(user);
+});
 
-router
-  .route("/pic")
-  .patch(requireUser, async (req, res) => {
-    const { profilePic } = req.body;
-    const userId = req.user.id;
-    const updatedProfilePic = await updateProfilePic(profilePic, userId);
-    res.status(200).json({
-      message: "Profile Picture Updated",
-      profilePic: updatedProfilePic.profilepic,
-    });
+router.route("/pic").patch(requireUser, async (req, res) => {
+  const { profilePic } = req.body;
+  const userId = req.user.id;
+  const updatedProfilePic = await updateProfilePic(profilePic, userId);
+  res.status(200).json({
+    message: "Profile Picture Updated",
+    profilePic: updatedProfilePic.profilepic,
   });
+});

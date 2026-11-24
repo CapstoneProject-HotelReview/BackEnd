@@ -1,34 +1,45 @@
 import express from "express";
-import requireBody from "#middleware/requireBody";
-import requireUser from "#middleware/requireUser";
-
 const router = express.Router();
-export default router;
 
-import { getReviewsByUserId, getReviewsByHotelId, addReview } from "#db/queries/reviews";
+import requireBody from "../middleware/requireBody.js";
+import requireUser from "../middleware/requireUser.js";
+import { getReviewsByUserId, addReview } from "../db/queries/reviews.js";
 
-router
-  .route("/:userId/reviews")
-  .get(async (req, res) => {
-    const { page = 1, limit = 3 } = req.query;
-    const reviews = await getReviewsByUserId(req.params.userId, parseInt(page), parseInt(limit));
-    return res.json(reviews);
-  });
+// GET reviews by user ID
+router.get("/user/:userId", async (req, res) => {
+  const { page = 1, limit = 3 } = req.query;
+  try {
+    const reviews = await getReviewsByUserId(
+      req.params.userId,
+      parseInt(page),
+      parseInt(limit),
+    );
+    res.json(reviews);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
 
-router
-  .route("/:hotelId/reviews")
-  .post(
-    requireUser,
-    requireBody(["rating", "subject", "review"]),
-    async (req, res) => {
-      const { rating, subject, review } = req.body;
+// POST review for hotel (requires user)
+router.post(
+  "/hotel/:hotelId",
+  requireUser,
+  requireBody(["rating", "subject", "review"]),
+  async (req, res) => {
+    const { rating, subject, review } = req.body;
+    try {
       const userReview = await addReview(
         req.params.hotelId,
         req.user.id,
         rating,
         subject,
-        review
+        review,
       );
       res.status(201).json(userReview);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
     }
-  );
+  },
+);
+
+export default router;
